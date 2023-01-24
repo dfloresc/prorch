@@ -1,0 +1,21 @@
+{
+    "pipelines": {
+        "1": {
+            "uuid": "87b1961b-5741-46f1-9e93-50a82f7be1e9",
+            "name": "email_pipeline",
+            "metadata": {
+                "current_step": "bc6091eb-b003-4f64-8cb2-05af0fe16926"
+            },
+            "status": "IN PROGRESS"
+        }
+    },
+    "pipeline_steps": {
+        "1": {
+            "uuid": "bc6091eb-b003-4f64-8cb2-05af0fe16926",
+            "name": "GenerateAudience",
+            "pipeline_uuid": "87b1961b-5741-46f1-9e93-50a82f7be1e9",
+            "metadata": {},
+            "status": "IN PROGRESS"
+        }
+    }
+}
