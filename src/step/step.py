@@ -5,13 +5,10 @@ from uuid import uuid4
 
 from .repository import StepRepository
 from .data_classes import StepData
-from exceptions import (
+from utils.exceptions import (
     StepNameNotDefinedException,
-    PipelineNotDefinedException,
-    RepositoryNotDefinedException,
+    PipelineNotDefinedException
 )
-
-logger = logging.getLogger(__name__)
 
 
 class Step:
@@ -21,15 +18,37 @@ class Step:
     metadata: Dict = {}
     status: str
 
-    def __init__(self, pipeline_uuid: str):
+    def __init__(self, pipeline_uuid: str = None, step_data: StepData = None):
         # validate data integrity
         self._validate_name()
+        self._init_repository()
 
+        if step_data:
+            self._load_instance(step_data=step_data)
+        else:
+            self._validate_pipeline_uuid(pipeline_uuid=pipeline_uuid)
+            self._create_instance(pipeline_uuid=pipeline_uuid)
+
+    def _init_repository(self):
+        self._repository = StepRepository()
+
+    def _load_instance(self, step_data: StepData):
+        self.uuid = step_data.uuid
+        self.pipeline_uuid = step_data.pipeline_uuid
+        self.metadata = step_data.metadata
+        self.status = step_data.status
+
+    def _create_instance(self, pipeline_uuid: str):
         self.uuid = str(uuid4())
         self.pipeline_uuid = pipeline_uuid
-        self.status = "PENDING"
-        self._repository = StepRepository()
+        self.status = "CREATED"
         self._save()
+
+    def _validate_pipeline_uuid(self, pipeline_uuid: str) -> bool:
+        if not pipeline_uuid:
+            raise PipelineNotDefinedException
+
+        return True
 
     def _validate_name(self) -> bool:
         if not self.name:
@@ -59,5 +78,5 @@ class Step:
 
     def start(self) -> None:
         print("starting step")
-        self.status = "IN PROGRESS"
+        self.status = "FINISHED"
         self._update()

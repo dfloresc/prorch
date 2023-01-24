@@ -1,3 +1,4 @@
+from typing import List
 from tinydb import TinyDB, Query
 from utils import Repository, SavedItem
 from dataclasses import asdict
@@ -20,3 +21,9 @@ class StepRepository(Repository):
     def update(self, uuid: str, data: StepData) -> StepData:
         query = Query()
         self._table.update(asdict(data), query.uuid == uuid)
+
+    def search_by_pipeline_uuid(self, pipeline_uuid: str) -> List[StepData]:
+        query = Query()
+        steps_data = self._table.search(query.pipeline_uuid == pipeline_uuid)
+
+        return [StepData(**step) for step in steps_data]

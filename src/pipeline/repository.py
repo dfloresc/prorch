@@ -15,7 +15,10 @@ class PipelineRepository(Repository):
         return SavedItem(identifier=id)
 
     def get(self, uuid: str) -> PipelineData:
-        pass
+        query = Query()
+        pipeline_data = self._table.get(query.uuid == uuid)
+
+        return PipelineData(**pipeline_data)
 
     def update(self, uuid: str, data: PipelineData) -> PipelineData:
         query = Query()
