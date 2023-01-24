@@ -1,23 +1,46 @@
-from pipeline import Pipeline
-from step import Step
+import step
+import pipeline
 from utils import register_step
+
 
 # steps
 @register_step
-class GenerateAudience(Step):
+class GenerateAudience(step.OnStart, step.OnContinue, step.Step):
     name = "GenerateAudience"
 
-@register_step
-class GenerateCache(Step):
-    name = "GenerateCache"
-    pass
+    def on_start(self):
+        print("AfterStarting")
+
+    def on_continue(self):
+        print("AfterContinue")
+        self.finish()
+
 
 @register_step
-class SendEmail(Step):
+class GenerateCache(step.OnStart, step.OnContinue, step.Step):
+    name = "GenerateCache"
+
+    def on_start(self):
+        print("AfterStarting")
+
+    def on_continue(self):
+        print("AfterContinue")
+        self.finish()
+
+
+@register_step
+class SendEmail(step.OnStart, step.OnContinue, step.Step):
     name = "SendEmail"
-    pass
+
+    def on_start(self):
+        print("AfterStarting")
+
+    def on_continue(self):
+        print("AfterContinue")
+        self.finish()
+
 
 # pipeline
-class EmailPipeline(Pipeline):
+class EmailPipeline(pipeline.Pipeline):
     name = "email_pipeline"
     steps = [GenerateAudience, GenerateCache, SendEmail]

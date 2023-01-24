@@ -5,6 +5,7 @@ from utils.exceptions import (
     StepsNotDefinedException,
     PipelineNameNotDefinedException,
 )
+from utils.constants import Status
 from .data_classes import PipelineData
 from .repository import PipelineRepository
 from step import StepServices
@@ -49,19 +50,20 @@ class Pipeline:
         wanted_step = None
         instance = None
 
-        if all([step.status == "FINISHED" for step in steps]):
+        if all([step.status == Status.FINISHED for step in steps]):
             self.finish()
-            return None
+            return
 
         for step in steps:
-            if step.status == "FAILED":
+            if step.status == Status.FAILED:
                 self.fail()
                 break
 
-            if step.status == "CANCELLED":
+            if step.status == Status.CANCELLED:
                 self.cancel()
+                break
 
-            if step.status in ["CREATED", "PENDING"]:
+            if step.status in [Status.CREATED, Status.PENDING]:
                 wanted_step = step
                 break
 
@@ -80,7 +82,7 @@ class Pipeline:
 
     def _create_instance(self):
         self.uuid = str(uuid4())
-        self.status = "CREATED"
+        self.status = Status.CREATED
         self._repository.save(
             data=self.to_dataclass(),
         )
@@ -106,22 +108,27 @@ class Pipeline:
         return self._repository.get(pipeline_uuid)
 
     def fail(self):
-        self.status = "FAILED"
+        self.status = Status.FAILED
         self._update()
 
     def cancel(self):
-        self.status = "CANCELLED"
+        self.status = Status.CANCELLED
         self._update()
 
     def finish(self):
-        self.status = "FINISHED"
+        self.status = Status.FINISHED
         self._update()
 
     def start(self):
         current_step = self._get_current_step_instance()
 
         if current_step:
-            current_step.start()
+            if current_step.status == Status.CREATED:
+                current_step.start()
+
+            if current_step.status == Status.PENDING:
+                current_step._continue()
+
             self.metadata["current_step"] = current_step.uuid
-            self.status = "PENDING"
+            self.status = Status.PENDING
             self._update()

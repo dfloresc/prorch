@@ -9,6 +9,7 @@ from utils.exceptions import (
     StepNameNotDefinedException,
     PipelineNotDefinedException
 )
+from utils.constants import Status
 
 
 class Step:
@@ -41,7 +42,7 @@ class Step:
     def _create_instance(self, pipeline_uuid: str):
         self.uuid = str(uuid4())
         self.pipeline_uuid = pipeline_uuid
-        self.status = "CREATED"
+        self.status = Status.CREATED
         self._save()
 
     def _validate_pipeline_uuid(self, pipeline_uuid: str) -> bool:
@@ -77,6 +78,23 @@ class Step:
         )
 
     def start(self) -> None:
-        print("starting step")
-        self.status = "FINISHED"
+        self.status = Status.PENDING
+        self._update()
+
+    def _continue(self) -> None:
+        if self.status in [Status.CANCELLED, Status.FAILED, Status.FINISHED]:
+            return
+
+        # use mixin to implement `on_continue` logic
+
+    def stop(self) -> None:
+        self.status = Status.CANCELLED
+        self._update()
+
+    def fail(self) -> None:
+        self.status = Status.FAILED
+        self._update()
+
+    def finish(self) -> None:
+        self.status = Status.FINISHED
         self._update()
