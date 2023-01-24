@@ -1,14 +1,14 @@
 from typing import List, Dict
 from uuid import uuid4
 
-from utils.exceptions import (
+from orchestrator.utils.exceptions import (
     StepsNotDefinedException,
     PipelineNameNotDefinedException,
 )
-from utils.constants import Status
+from orchestrator.utils.constants import Status
 from .data_classes import PipelineData
 from .repository import PipelineRepository
-from step import StepServices
+from orchestrator.step import StepServices
 
 class Pipeline:
     uuid: str = None

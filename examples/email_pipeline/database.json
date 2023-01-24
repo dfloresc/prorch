@@ -1,0 +1,35 @@
+{
+    "pipelines": {
+        "1": {
+            "uuid": "a2e40312-c8dd-429e-8241-f4db08cd2991",
+            "name": "EmailPipeline",
+            "metadata": {
+                "current_step": "c0d3949c-c8dd-4bdc-b847-18d90312cca6"
+            },
+            "status": "failed"
+        }
+    },
+    "pipeline_steps": {
+        "1": {
+            "uuid": "324a666a-908e-4703-b66e-d161ed863ba7",
+            "name": "GenerateAudience",
+            "pipeline_uuid": "a2e40312-c8dd-429e-8241-f4db08cd2991",
+            "metadata": {},
+            "status": "finished"
+        },
+        "2": {
+            "uuid": "c0d3949c-c8dd-4bdc-b847-18d90312cca6",
+            "name": "GenerateCache",
+            "pipeline_uuid": "a2e40312-c8dd-429e-8241-f4db08cd2991",
+            "metadata": {},
+            "status": "failed"
+        },
+        "3": {
+            "uuid": "a41a43cd-3ebe-44a6-9c09-7bb6c18254da",
+            "name": "SendEmail",
+            "pipeline_uuid": "a2e40312-c8dd-429e-8241-f4db08cd2991",
+            "metadata": {},
+            "status": "created"
+        }
+    }
+}

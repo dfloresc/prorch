@@ -1,6 +1,7 @@
+from typing import List
 from tinydb import TinyDB, Query
-from utils import Repository, SavedItem
-from dataclasses import asdict
+from orchestrator.utils import Repository, SavedItem, Status
+from dataclasses import asdict, make_dataclass
 
 from .data_classes import PipelineData
 
@@ -23,3 +24,10 @@ class PipelineRepository(Repository):
     def update(self, uuid: str, data: PipelineData) -> PipelineData:
         query = Query()
         self._table.update(asdict(data), query.uuid == uuid)
+
+    def get_active_pipelines(self) -> List[PipelineData]:
+        query = Query()
+        active_pipelines = self._table.search(query.status == Status.PENDING)
+        pipelines_data = [PipelineData(**data) for data in active_pipelines if active_pipelines]
+
+        return pipelines_data
