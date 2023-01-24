@@ -4,9 +4,9 @@ from uuid import uuid4
 from exceptions import (
     StepsNotDefinedException,
     PipelineNameNotDefinedException,
-    RepositoryNotDefinedException,
 )
-from pipeline import PipelineData, PipelineRepository
+from .data_classes import PipelineData
+from .repository import PipelineRepository
 from step import Step
 
 class Pipeline:
@@ -19,7 +19,6 @@ class Pipeline:
     def __init__(self, pipeline_uuid: str = None):
         self._validate_pipeline_name()
         self._validate_pipeline_steps()
-        self._validate_repository()
 
         self._repository = PipelineRepository() # could be an inversed dependency but i wan't complex it.
 
@@ -33,12 +32,6 @@ class Pipeline:
     def _validate_pipeline_name(self) -> bool:
         if not self.name:
             raise PipelineNameNotDefinedException
-
-        return True
-
-    def _validate_repository(self) -> bool:
-        if not self.repository_class:
-            raise RepositoryNotDefinedException
 
         return True
 

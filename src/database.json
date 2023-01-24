@@ -1,19 +1,40 @@
 {
     "pipelines": {
         "1": {
-            "uuid": "87b1961b-5741-46f1-9e93-50a82f7be1e9",
+            "uuid": "80739297-204b-4f44-a358-ebfa69f5f1b8",
             "name": "email_pipeline",
             "metadata": {
-                "current_step": "bc6091eb-b003-4f64-8cb2-05af0fe16926"
+                "current_step": "7830f92b-ce77-45e9-8a3b-052c88cfa61b"
             },
             "status": "IN PROGRESS"
         }
     },
     "pipeline_steps": {
         "1": {
-            "uuid": "bc6091eb-b003-4f64-8cb2-05af0fe16926",
+            "uuid": "9d7e56df-12d1-4a35-8818-622a3709de00",
             "name": "GenerateAudience",
-            "pipeline_uuid": "87b1961b-5741-46f1-9e93-50a82f7be1e9",
+            "pipeline_uuid": "80739297-204b-4f44-a358-ebfa69f5f1b8",
+            "metadata": {},
+            "status": "PENDING"
+        },
+        "2": {
+            "uuid": "4d7f2f6a-3f6f-430b-9fef-19183ac48155",
+            "name": "GenerateCache",
+            "pipeline_uuid": "80739297-204b-4f44-a358-ebfa69f5f1b8",
+            "metadata": {},
+            "status": "PENDING"
+        },
+        "3": {
+            "uuid": "059e4d9e-2766-4244-8b90-65a8f08716ab",
+            "name": "SendEmail",
+            "pipeline_uuid": "80739297-204b-4f44-a358-ebfa69f5f1b8",
+            "metadata": {},
+            "status": "PENDING"
+        },
+        "4": {
+            "uuid": "7830f92b-ce77-45e9-8a3b-052c88cfa61b",
+            "name": "GenerateAudience",
+            "pipeline_uuid": "80739297-204b-4f44-a358-ebfa69f5f1b8",
             "metadata": {},
             "status": "IN PROGRESS"
         }

@@ -1,13 +1,16 @@
-from src import Pipeline, Step
+from pipeline import Pipeline
+from step import Step
 
 # steps
 class GenerateAudience(Step):
     name = "GenerateAudience"
 
 class GenerateCache(Step):
+    name = "GenerateCache"
     pass
 
 class SendEmail(Step):
+    name = "SendEmail"
     pass
 
 # pipeline

@@ -3,8 +3,8 @@ import logging
 from typing import Dict
 from uuid import uuid4
 
-from repositories.pipeline_repository import StepRepository, Repository
-from lib.pipelines_dataclass import StepData
+from .repository import StepRepository
+from .data_classes import StepData
 from exceptions import (
     StepNameNotDefinedException,
     PipelineNotDefinedException,
@@ -18,7 +18,6 @@ class Step:
     uuid: str = None
     name: str = None
     pipeline_uuid: str = None
-    repository: Repository = None
     metadata: Dict = {}
     status: str
 
@@ -29,14 +28,8 @@ class Step:
         self.uuid = str(uuid4())
         self.pipeline_uuid = pipeline_uuid
         self.status = "PENDING"
-        self._repository = self.repository()
+        self._repository = StepRepository()
         self._save()
-
-    def _validate_repository(self) -> bool:
-        if not self.repository:
-            raise RepositoryNotDefinedException
-
-        return True
 
     def _validate_name(self) -> bool:
         if not self.name:

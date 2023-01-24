@@ -2,7 +2,7 @@ from tinydb import TinyDB, Query
 from utils import Repository, SavedItem
 from dataclasses import asdict
 
-from . import PipelineData
+from .data_classes import PipelineData
 
 class PipelineRepository(Repository):
     def __init__(self):

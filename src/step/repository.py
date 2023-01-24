@@ -2,7 +2,7 @@ from tinydb import TinyDB, Query
 from utils import Repository, SavedItem
 from dataclasses import asdict
 
-from . import StepData
+from .data_classes import StepData
 
 class StepRepository(Repository):
     def __init__(self):

@@ -1,4 +1,2 @@
-from step import Step
-from data_classes import StepData
-
-__all__ = [Step, StepData]
+from .data_classes import StepData
+from .step import Step
