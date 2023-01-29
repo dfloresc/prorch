@@ -1,3 +1,6 @@
+from dataclasses import asdict
+from typing import Dict
+
 from orchestrator.utils import IRepository
 
 
@@ -14,3 +17,9 @@ class BaseProvider:
 
     def _init_repository(self):
         self._repository = self.repository_class(self._model)
+
+    def save(self, data: Dict):
+        self._repository.save(data=asdict(data))
+
+    def update(self, uuid: str, data: Dict):
+        self._repository.update(uuid=uuid, data=asdict(data))

@@ -1,6 +1,5 @@
-from typing import List, Dict
+from typing import List
 from orchestrator.utils import Metadata, BaseProvider
-from dataclasses import asdict
 
 from .data_classes import PipelineData
 
@@ -17,9 +16,3 @@ class PipelineProvider(BaseProvider):
         pipeline = self._repository.get(uuid=uuid)
 
         return PipelineData(**pipeline)
-
-    def save_pipeline(self, data: Dict):
-        self._repository.save(data=asdict(data))
-
-    def update_pipeline(self, uuid: str, data: Dict):
-        self._repository.update(uuid=uuid, data=asdict(data))

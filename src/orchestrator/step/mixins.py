@@ -1,4 +1,3 @@
-
 class OnStart:
     def start(self):
         super().start()

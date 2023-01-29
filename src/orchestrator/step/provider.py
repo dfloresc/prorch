@@ -1,5 +1,4 @@
-from dataclasses import asdict
-from typing import List, Dict
+from typing import List
 
 from orchestrator.utils import BaseProvider, Metadata
 from orchestrator.step import StepData
@@ -15,9 +14,3 @@ class StepProvider(BaseProvider):
         steps = self._repository.search(["pipeline_uuid", pipeline_uuid])
 
         return [StepData(**data) for data in steps if steps]
-
-    def save_step(self, data: Dict):
-        self._repository.save(data=asdict(data))
-
-    def update_step(self, uuid: str, data: Dict):
-        self._repository.update(uuid=uuid, data=asdict(data))

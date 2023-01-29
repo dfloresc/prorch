@@ -7,31 +7,31 @@ from orchestrator.utils.exceptions import (
     PipelineNameNotDefinedException,
 )
 from orchestrator.utils.constants import Status
-from orchestrator.utils import IRepository
+from orchestrator.utils import IRepository, BaseOrchestrator
 from .data_classes import PipelineData
 from .provider import PipelineProvider
 from orchestrator.step import StepServices
 
 
-class Pipeline:
+class Pipeline(BaseOrchestrator):
     uuid: str = None
     name: str = None
     steps: List[str] = None
     metadata: Dict = {"current_step": None}
     status: str = None
+
     _repository_class: IRepository
+    _provider_class = PipelineProvider
 
     def __init__(
         self,
         repository_class: IRepository,
         pipeline_uuid: str = None,
     ):
+        super().__init__(repository_class)
+
         self._validate_pipeline_name()
         self._validate_pipeline_steps()
-
-        self._repository_class = repository_class
-
-        self._init_provider()
         self._init_instance(pipeline_uuid=pipeline_uuid)
 
     def _init_instance(self, pipeline_uuid: str):
@@ -39,11 +39,6 @@ class Pipeline:
             self._create_instance()
         else:
             self._load_instance(pipeline_uuid=pipeline_uuid)
-
-    def _init_provider(self):  # todo: abstract
-        self._provider = PipelineProvider(
-            repository_class=self._repository_class
-        )
 
     def _validate_pipeline_name(self) -> bool:
         if not self.name:
@@ -129,28 +124,6 @@ class Pipeline:
 
     def _get(self, uuid: str) -> PipelineData:
         return self._provider.get_pipeline_by_uuid(uuid=uuid)
-
-    def _save(self):
-        self._provider.save_pipeline(data=self.to_dataclass())
-
-    def _update(self):
-        self._provider.update_pipeline(
-            uuid=self.uuid,
-            data=self.to_dataclass()
-        )
-
-    def _update_status(self, status: Status):
-        self.status = status
-        self._update()
-
-    def fail(self):
-        self._update_status(Status.FAILED)
-
-    def cancel(self):
-        self._update_status(Status.CANCELLED)
-
-    def finish(self):
-        self._update_status(Status.FINISHED)
 
     def start(self):
         steps = StepServices.search_steps_by_pipeline_uuid(

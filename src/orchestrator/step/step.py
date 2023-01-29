@@ -9,16 +9,18 @@ from orchestrator.utils.exceptions import (
     PipelineNotDefinedException
 )
 from orchestrator.utils.constants import Status
-from orchestrator.utils import IRepository
+from orchestrator.utils import IRepository, BaseOrchestrator
 
 
-class Step:
+class Step(BaseOrchestrator):
     uuid: str = None
     name: str = None
     pipeline_uuid: str = None
     metadata: Dict = {}
     status: str
+
     _repository_class: IRepository
+    _provider_class = StepProvider
 
     def __init__(
         self,
@@ -26,21 +28,14 @@ class Step:
         pipeline_uuid: str = None,
         step_data: StepData = None
     ):
+        super().__init__(repository_class)
         self._validate_name()
-
-        self._repository_class = repository_class
-        self._init_repository()
 
         if step_data:
             self._load_instance(step_data=step_data)
         else:
             self._validate_pipeline_uuid(pipeline_uuid=pipeline_uuid)
             self._create_instance(pipeline_uuid=pipeline_uuid)
-
-    def _init_repository(self):
-        self._provider = StepProvider(
-            repository_class=self._repository_class,
-        )
 
     def _load_instance(self, step_data: StepData):
         self.uuid = step_data.uuid
@@ -75,30 +70,8 @@ class Step:
             status=self.status
         )
 
-    def _save(self) -> None:
-        self._provider.save_step(data=self.to_dataclass())
-
-    def _update(self):
-        self._provider.update_step(uuid=self.uuid, data=self.to_dataclass())
-
-    def start(self) -> None:
-        self.status = Status.PENDING
-        self._update()
-
     def _continue(self) -> None:
         if self.status in [Status.CANCELLED, Status.FAILED, Status.FINISHED]:
             return
 
         # use mixin to implement `on_continue` logic
-
-    def stop(self) -> None:
-        self.status = Status.CANCELLED
-        self._update()
-
-    def fail(self) -> None:
-        self.status = Status.FAILED
-        self._update()
-
-    def finish(self) -> None:
-        self.status = Status.FINISHED
-        self._update()
