@@ -1,21 +1,11 @@
 from typing import List
 
-from .repository import PipelineRepository
-from .data_classes import PipelineData
-
-from orchestrator.utils import UtilServices
-
-def get_active_pipelines() -> List[PipelineData]:
-    repository = PipelineRepository()
-
-    return repository.get_active_pipelines()
+from orchestrator.pipeline.provider import PipelineProvider
+from orchestrator.pipeline.data_classes import PipelineData
+from orchestrator.utils import IRepository
 
 
-def execute_all_active_pipelines() -> None:
-    active_pipelines = get_active_pipelines()
+def get_active_pipelines(repository_class: IRepository) -> List[PipelineData]:
+    provider = PipelineProvider(repository_class=repository_class)
 
-    if active_pipelines:
-        for pipeline in active_pipelines:
-            pipeline_class = UtilServices.get_pipeline_class(pipeline.name)
-            instance = pipeline_class(pipeline.uuid)
-            instance.start()
+    return provider.get_active_pipelines()

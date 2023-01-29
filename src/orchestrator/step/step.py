@@ -1,15 +1,15 @@
-import logging
-
 from typing import Dict
 from uuid import uuid4
 
-from .repository import StepRepository
+from orchestrator.step.provider import StepProvider
+
 from .data_classes import StepData
 from orchestrator.utils.exceptions import (
     StepNameNotDefinedException,
     PipelineNotDefinedException
 )
 from orchestrator.utils.constants import Status
+from orchestrator.utils import IRepository
 
 
 class Step:
@@ -18,10 +18,17 @@ class Step:
     pipeline_uuid: str = None
     metadata: Dict = {}
     status: str
+    _repository_class: IRepository
 
-    def __init__(self, pipeline_uuid: str = None, step_data: StepData = None):
-        # validate data integrity
+    def __init__(
+        self,
+        repository_class,
+        pipeline_uuid: str = None,
+        step_data: StepData = None
+    ):
         self._validate_name()
+
+        self._repository_class = repository_class
         self._init_repository()
 
         if step_data:
@@ -31,7 +38,9 @@ class Step:
             self._create_instance(pipeline_uuid=pipeline_uuid)
 
     def _init_repository(self):
-        self._repository = StepRepository()
+        self._provider = StepProvider(
+            repository_class=self._repository_class,
+        )
 
     def _load_instance(self, step_data: StepData):
         self.uuid = step_data.uuid
@@ -67,15 +76,10 @@ class Step:
         )
 
     def _save(self) -> None:
-        self._repository.save(
-            data=self.to_dataclass(),
-        )
+        self._provider.save_step(data=self.to_dataclass())
 
     def _update(self):
-        self._repository.update(
-            uuid=self.uuid,
-            data=self.to_dataclass(),
-        )
+        self._provider.update_step(uuid=self.uuid, data=self.to_dataclass())
 
     def start(self) -> None:
         self.status = Status.PENDING

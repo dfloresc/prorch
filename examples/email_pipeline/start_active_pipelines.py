@@ -1,5 +1,8 @@
-from orchestrator.pipeline import PipelineServices
-
+from orchestrator.utils.factory import Orchestrator, OrchestratorConfig
 from pipelines import *
+from tinydb_repository import TinyDBRepository
 
-PipelineServices.execute_all_active_pipelines()
+
+orchestrator_config = OrchestratorConfig(repository_class=TinyDBRepository)
+orchestrator = Orchestrator(config=orchestrator_config)
+orchestrator.execute_pipelines()

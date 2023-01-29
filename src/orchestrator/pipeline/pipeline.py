@@ -1,3 +1,4 @@
+from collections import Counter
 from typing import List, Dict
 from uuid import uuid4
 
@@ -6,9 +7,11 @@ from orchestrator.utils.exceptions import (
     PipelineNameNotDefinedException,
 )
 from orchestrator.utils.constants import Status
+from orchestrator.utils import IRepository
 from .data_classes import PipelineData
-from .repository import PipelineRepository
+from .provider import PipelineProvider
 from orchestrator.step import StepServices
+
 
 class Pipeline:
     uuid: str = None
@@ -16,12 +19,19 @@ class Pipeline:
     steps: List[str] = None
     metadata: Dict = {"current_step": None}
     status: str = None
+    _repository_class: IRepository
 
-    def __init__(self, pipeline_uuid: str = None):
+    def __init__(
+        self,
+        repository_class: IRepository,
+        pipeline_uuid: str = None,
+    ):
         self._validate_pipeline_name()
         self._validate_pipeline_steps()
 
-        self._init_repository()
+        self._repository_class = repository_class
+
+        self._init_provider()
         self._init_instance(pipeline_uuid=pipeline_uuid)
 
     def _init_instance(self, pipeline_uuid: str):
@@ -30,8 +40,10 @@ class Pipeline:
         else:
             self._load_instance(pipeline_uuid=pipeline_uuid)
 
-    def _init_repository(self):
-        self._repository = PipelineRepository() # could be an inversed dependency but i wan't complex it.
+    def _init_provider(self):  # todo: abstract
+        self._provider = PipelineProvider(
+            repository_class=self._repository_class
+        )
 
     def _validate_pipeline_name(self) -> bool:
         if not self.name:
@@ -45,30 +57,46 @@ class Pipeline:
 
         return True
 
-    def _get_current_step_instance(self): # TODO: put dataclass as typing
-        steps = StepServices.search_by_pipeline_uuid(pipeline_uuid=self.uuid)
+    def _check_action_needed(self, steps):
+        steps_status_mapped = Counter([step.status for step in steps])
+
+        must_fail = steps_status_mapped[Status.FAILED] > 0
+        must_cancel = steps_status_mapped[Status.CANCELLED] > 0
+        must_finish = steps_status_mapped[Status.FINISHED] == len(steps)
+
+        return must_fail, must_cancel, must_finish
+
+    def _should_continue(self, steps):
+        should_continue = True
+        must_fail, must_cancel, must_finish = self._check_action_needed(steps)
+
+        if must_fail:
+            should_continue = False
+            self.fail()
+        elif must_cancel:
+            should_continue = False
+            self.cancel()
+        elif must_finish:
+            should_continue = False
+            self.finish()
+
+        return should_continue
+
+    # TODO: put dataclass as typing
+    def _get_current_step_instance(self, steps, repository_class):
         wanted_step = None
         instance = None
 
-        if all([step.status == Status.FINISHED for step in steps]):
-            self.finish()
-            return
-
         for step in steps:
-            if step.status == Status.FAILED:
-                self.fail()
-                break
-
-            if step.status == Status.CANCELLED:
-                self.cancel()
-                break
-
             if step.status in [Status.CREATED, Status.PENDING]:
                 wanted_step = step
                 break
 
         if wanted_step:
-            instance = StepServices.get_step_instance(step_data=wanted_step)
+            instance = StepServices.get_step_instance(
+                step_data=wanted_step,
+                repository_class=repository_class
+            )
 
         return instance
 
@@ -83,52 +111,67 @@ class Pipeline:
     def _create_instance(self):
         self.uuid = str(uuid4())
         self.status = Status.CREATED
-        self._repository.save(
-            data=self.to_dataclass(),
-        )
+        self._save()
 
         for step in self.steps:
-            # only for creating register in repository
-            _ = step(pipeline_uuid=self.uuid)
-
-    def _update(self):
-        self._repository.update(
-            uuid=self.uuid,
-            data=self.to_dataclass(),
-        )
+            # only for instance rows in repository
+            _ = step(
+                repository_class=self._repository_class,
+                pipeline_uuid=self.uuid
+            )
 
     def _load_instance(self, pipeline_uuid: str):
-        pipeline_data = self._get(pipeline_uuid)
+        pipeline_data = self._get(uuid=pipeline_uuid)
 
         self.uuid = pipeline_data.uuid
         self.status = pipeline_data.status
         self.metadata = pipeline_data.metadata
 
-    def _get(self, pipeline_uuid: str) -> PipelineData:
-        return self._repository.get(pipeline_uuid)
+    def _get(self, uuid: str) -> PipelineData:
+        return self._provider.get_pipeline_by_uuid(uuid=uuid)
+
+    def _save(self):
+        self._provider.save_pipeline(data=self.to_dataclass())
+
+    def _update(self):
+        self._provider.update_pipeline(
+            uuid=self.uuid,
+            data=self.to_dataclass()
+        )
+
+    def _update_status(self, status: Status):
+        self.status = status
+        self._update()
 
     def fail(self):
-        self.status = Status.FAILED
-        self._update()
+        self._update_status(Status.FAILED)
 
     def cancel(self):
-        self.status = Status.CANCELLED
-        self._update()
+        self._update_status(Status.CANCELLED)
 
     def finish(self):
-        self.status = Status.FINISHED
-        self._update()
+        self._update_status(Status.FINISHED)
 
     def start(self):
-        current_step = self._get_current_step_instance()
+        steps = StepServices.search_steps_by_pipeline_uuid(
+            repository_class=self._repository_class,
+            pipeline_uuid=self.uuid,
+        )
+
+        if not self._should_continue(steps):
+            return
+
+        current_step = self._get_current_step_instance(
+            steps=steps,
+            repository_class=self._repository_class,
+        )
 
         if current_step:
             if current_step.status == Status.CREATED:
+                self.metadata["current_step"] = current_step.uuid
+                self.status = Status.PENDING
                 current_step.start()
+                self._update()
 
             if current_step.status == Status.PENDING:
                 current_step._continue()
-
-            self.metadata["current_step"] = current_step.uuid
-            self.status = Status.PENDING
-            self._update()
