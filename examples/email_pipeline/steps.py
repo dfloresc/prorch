@@ -1,10 +1,10 @@
-from orchestrator import step
+from orchestrator.step.step import Step
 from orchestrator.step.mixins import OnStart, OnContinue
-from orchestrator.utils import register_step
+from orchestrator.utils.decorators import register_step
 
 
 @register_step
-class GenerateAudience(OnStart, OnContinue, step.Step):
+class GenerateAudience(OnStart, OnContinue, Step):
     name = "GenerateAudience"
 
     def on_start(self):
@@ -16,7 +16,7 @@ class GenerateAudience(OnStart, OnContinue, step.Step):
 
 
 @register_step
-class GenerateCache(OnStart, OnContinue, step.Step):
+class GenerateCache(OnStart, OnContinue, Step):
     name = "GenerateCache"
 
     def on_start(self):
@@ -28,7 +28,7 @@ class GenerateCache(OnStart, OnContinue, step.Step):
 
 
 @register_step
-class SendEmail(OnStart, OnContinue, step.Step):
+class SendEmail(OnStart, OnContinue, Step):
     name = "SendEmail"
 
     def on_start(self):

@@ -1,10 +1,10 @@
 from typing import List
-from orchestrator.pipeline import (
-    PipelineData,
-    services as pipeline_services
-)
+
+from orchestrator.pipeline.data_classes import PipelineData
+from orchestrator.pipeline import services as pipeline_services
+from orchestrator.utils import services as UtilServices
 from orchestrator.utils.data_classes import OrchestratorConfig
-from orchestrator.utils import UtilServices, IRepository
+from orchestrator.utils.interfaces import IRepository
 
 
 class Orchestrator:

@@ -1,7 +1,9 @@
 from tinydb import TinyDB, where
 from typing import Dict, List, Union
 
-from orchestrator.utils import IRepository, SavedItem, Metadata
+from orchestrator.utils.constants import Metadata
+from orchestrator.utils.data_classes import SavedItem
+from orchestrator.utils.interfaces import IRepository
 
 
 class TinyDBRepository(IRepository):

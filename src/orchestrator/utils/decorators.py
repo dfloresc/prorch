@@ -1,4 +1,5 @@
-from .constants import PIPELINES, STEPS
+from orchestrator.utils.constants import PIPELINES, STEPS
+
 
 def register_pipeline(pipeline_class):
     PIPELINES.update({pipeline_class.name: pipeline_class})

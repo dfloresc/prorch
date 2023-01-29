@@ -1,4 +1,3 @@
-
 class StepsNotDefinedException(Exception):
     pass
 

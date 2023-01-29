@@ -1,7 +1,8 @@
 from typing import List
-from orchestrator.utils import Metadata, BaseProvider
 
-from .data_classes import PipelineData
+from orchestrator.pipeline.data_classes import PipelineData
+from orchestrator.utils.constants import Metadata
+from orchestrator.utils.providers import BaseProvider
 
 
 class PipelineProvider(BaseProvider):

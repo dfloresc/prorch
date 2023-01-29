@@ -2,8 +2,9 @@ from typing import List
 
 from orchestrator.step.provider import StepProvider
 from orchestrator.step.data_classes import StepData
-from orchestrator.step import Step
-from orchestrator.utils import UtilServices, IRepository
+from orchestrator.step.step import Step
+from orchestrator.utils import services as UtilServices
+from orchestrator.utils.interfaces import IRepository
 
 
 def search_steps_by_pipeline_uuid(

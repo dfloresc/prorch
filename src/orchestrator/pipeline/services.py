@@ -1,8 +1,8 @@
 from typing import List
 
-from orchestrator.pipeline.provider import PipelineProvider
 from orchestrator.pipeline.data_classes import PipelineData
-from orchestrator.utils import IRepository
+from orchestrator.pipeline.provider import PipelineProvider
+from orchestrator.utils.interfaces import IRepository
 
 
 def get_active_pipelines(repository_class: IRepository) -> List[PipelineData]:

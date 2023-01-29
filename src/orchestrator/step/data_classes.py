@@ -1,6 +1,7 @@
 from dataclasses import dataclass
 from typing import Dict, Union
 
+
 @dataclass
 class StepData:
     uuid: str
