@@ -8,6 +8,7 @@ from orchestrator.step.step import Step
 class TestRepository(IRepository):
     __test__ = False
     """Test repository with all method doing nothing. Those will be mocked"""
+
     def get(self, uuid: str) -> Dict:
         pass
 
@@ -22,7 +23,7 @@ class TestRepository(IRepository):
 
 
 class FirstTestStep(Step):
-    pass
+    name = "FirstTestStep"
 
 
 @register_pipeline
@@ -34,8 +35,14 @@ class TestPipelineWithSteps(Pipeline):
 
 
 @register_pipeline
+class TestPipelineWithoutName(Pipeline):
+    __test__ = False
+
+    steps = []
+
+
+@register_pipeline
 class TestPipelineWithoutSteps(Pipeline):
     __test__ = False
 
     name = "TestPipelineWithoutSteps"
-    steps = []

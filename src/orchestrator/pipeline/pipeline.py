@@ -1,11 +1,12 @@
 from collections import Counter
-from typing import List, Dict
+from typing import List, Dict, Tuple
 from uuid import uuid4
 
 from orchestrator.pipeline.data_classes import PipelineData
 from orchestrator.pipeline.provider import PipelineProvider
 
 from orchestrator.step import services as StepServices
+from orchestrator.step.data_classes import StepData
 
 from orchestrator.utils.exceptions import (
     StepsNotDefinedException,
@@ -50,12 +51,15 @@ class Pipeline(BaseOrchestrator):
         return True
 
     def _validate_pipeline_steps(self) -> bool:
-        if not len(self.steps):
+        if not self.steps or not len(self.steps):
             raise StepsNotDefinedException
 
         return True
 
-    def _check_action_needed(self, steps):
+    def _check_action_needed(
+        self,
+        steps: List[StepData]
+    ) -> Tuple[bool, bool, bool]:
         steps_status_mapped = Counter([step.status for step in steps])
 
         must_fail = steps_status_mapped[Status.FAILED] > 0
@@ -64,7 +68,7 @@ class Pipeline(BaseOrchestrator):
 
         return must_fail, must_cancel, must_finish
 
-    def _should_continue(self, steps):
+    def _should_continue(self, steps: List[StepData]) -> bool:
         should_continue = True
         must_fail, must_cancel, must_finish = self._check_action_needed(steps)
 
@@ -80,8 +84,11 @@ class Pipeline(BaseOrchestrator):
 
         return should_continue
 
-    # TODO: put dataclass as typing
-    def _get_current_step_instance(self, steps, repository_class):
+    def _get_current_step_instance(
+        self,
+        steps: List[StepData],
+        repository_class: IRepository
+    ):
         wanted_step = None
         instance = None
 
