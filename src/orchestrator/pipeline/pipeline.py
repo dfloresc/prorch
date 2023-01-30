@@ -112,7 +112,7 @@ class Pipeline(BaseOrchestrator):
         self._save()
 
         for step in self.steps:
-            # only for instance rows in repository
+            # instance for creation only
             _ = step(
                 repository_class=self._repository_class,
                 pipeline_uuid=self.uuid

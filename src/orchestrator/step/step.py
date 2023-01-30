@@ -3,11 +3,11 @@ from uuid import uuid4
 
 from orchestrator.utils.constants import Status
 from orchestrator.utils.exceptions import (
+    PipelineNotDefinedException,
     StepNameNotDefinedException,
-    PipelineNotDefinedException
 )
-from orchestrator.step.provider import StepProvider
 from orchestrator.step.data_classes import StepData
+from orchestrator.step.provider import StepProvider
 from orchestrator.utils.base import BaseOrchestrator
 from orchestrator.utils.interfaces import IRepository
 
@@ -74,4 +74,4 @@ class Step(BaseOrchestrator):
         if self.status in [Status.CANCELLED, Status.FAILED, Status.FINISHED]:
             return
 
-        # use mixin to implement `on_continue` logic
+        # do something through the onContinue mixin

@@ -1,0 +1,41 @@
+from typing import Dict, List, Union
+from orchestrator.pipeline.pipeline import Pipeline
+from orchestrator.utils.decorators import register_pipeline
+from orchestrator.utils.interfaces import IRepository
+from orchestrator.step.step import Step
+
+
+class TestRepository(IRepository):
+    __test__ = False
+    """Test repository with all method doing nothing. Those will be mocked"""
+    def get(self, uuid: str) -> Dict:
+        pass
+
+    def save(self, data: Dict):
+        pass
+
+    def update(self, uuid: str, data: Dict) -> Dict:
+        pass
+
+    def search(self, filter: List[Union[str, List]]) -> Dict:
+        pass
+
+
+class FirstTestStep(Step):
+    pass
+
+
+@register_pipeline
+class TestPipelineWithSteps(Pipeline):
+    __test__ = False
+
+    name = "TestPipelineWithSteps"
+    steps = [FirstTestStep]
+
+
+@register_pipeline
+class TestPipelineWithoutSteps(Pipeline):
+    __test__ = False
+
+    name = "TestPipelineWithoutSteps"
+    steps = []
