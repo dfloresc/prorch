@@ -145,3 +145,76 @@ class TestPipeline:
 
         mocked_create_instance.assert_called_once()
         assert result == expected_results
+
+    @pytest.mark.parametrize(
+        [
+            "check_action_needed_response",
+            "fail_callcount",
+            "cancel_callcount",
+            "finish_callcount",
+            "expected_result"
+        ],
+        [
+            [
+                (False, False, False),
+                0,
+                0,
+                0,
+                True
+            ],
+            [
+                (True, False, False),
+                1,
+                0,
+                0,
+                False
+            ],
+            [
+                (False, True, False),
+                0,
+                1,
+                0,
+                False
+            ],
+            [
+                (False, False, True),
+                0,
+                0,
+                1,
+                False
+            ],
+        ])
+    def test_should_continue(
+        self,
+        mocker,
+        check_action_needed_response,
+        fail_callcount,
+        cancel_callcount,
+        finish_callcount,
+        expected_result
+    ):
+        mocked_check_action_needed = mocker.patch(
+            "conftest.TestPipelineWithSteps._check_action_needed",
+            return_value=check_action_needed_response
+        )
+        mocked_fail = mocker.patch(
+            "conftest.TestPipelineWithSteps.fail",
+            return_value=None,
+        )
+        mocked_cancel = mocker.patch(
+            "conftest.TestPipelineWithSteps.cancel",
+            return_value=None,
+        )
+        mocked_finish = mocker.patch(
+            "conftest.TestPipelineWithSteps.finish",
+            return_value=None,
+        )
+
+        instance = TestPipelineWithSteps(repository_class=TestRepository)
+        result = instance._should_continue(steps=[])
+
+        mocked_check_action_needed.assert_called_once()
+        assert mocked_fail.call_count == fail_callcount
+        assert mocked_cancel.call_count == cancel_callcount
+        assert mocked_finish.call_count == finish_callcount
+        assert result == expected_result
