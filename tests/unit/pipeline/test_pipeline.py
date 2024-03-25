@@ -1,16 +1,13 @@
 import pytest
-
 from conftest import (
     TestPipelineWithoutName,
     TestPipelineWithoutSteps,
     TestPipelineWithSteps,
     TestRepository,
 )
-from prorch.exceptions.exceptions import (
-    PipelineNameNotDefinedException,
-    StepsNotDefinedException,
-)
+
 from prorch.dataclasses.step import StepData
+from prorch.exceptions.exceptions import PipelineNameNotDefinedException, StepsNotDefinedException
 from prorch.utils.constants import Status
 
 
@@ -30,8 +27,7 @@ class TestPipeline:
 
     def test_pipeline_should_create_a_new_instance(self, mocker):
         mocked_create_instance = mocker.patch(
-            "conftest.TestPipelineWithSteps._create_instance",
-            return_value={}
+            "conftest.TestPipelineWithSteps._create_instance", return_value={}
         )
 
         TestPipelineWithSteps(repository_class=TestRepository)
@@ -40,8 +36,7 @@ class TestPipeline:
 
     def test_pipeline_should_load_a_created_instance(self, mocker):
         mocked_load_instance = mocker.patch(
-            "conftest.TestPipelineWithSteps._load_instance",
-            return_value={}
+            "conftest.TestPipelineWithSteps._load_instance", return_value={}
         )
 
         TestPipelineWithSteps(
@@ -51,93 +46,90 @@ class TestPipeline:
 
         mocked_load_instance.assert_called_once()
 
-    @pytest.mark.parametrize(["steps", "expected_results"], [
+    @pytest.mark.parametrize(
+        ["steps", "expected_results"],
         [
             [
-                StepData(
-                    uuid="mocked",
-                    name="mocked",
-                    pipeline_uuid="mocked",
-                    metadata={},
-                    status=Status.FAILED
-                ),
-                StepData(
-                    uuid="mocked",
-                    name="mocked",
-                    pipeline_uuid="mocked",
-                    metadata={},
-                    status=Status.CREATED
-                ),
+                [
+                    StepData(
+                        uuid="mocked",
+                        name="mocked",
+                        pipeline_uuid="mocked",
+                        metadata={},
+                        status=Status.FAILED,
+                    ),
+                    StepData(
+                        uuid="mocked",
+                        name="mocked",
+                        pipeline_uuid="mocked",
+                        metadata={},
+                        status=Status.CREATED,
+                    ),
+                ],
+                (True, False, False),
             ],
-            (True, False, False),
-        ],
-        [
             [
-                StepData(
-                    uuid="mocked",
-                    name="mocked",
-                    pipeline_uuid="mocked",
-                    metadata={},
-                    status=Status.CREATED
-                ),
-                StepData(
-                    uuid="mocked",
-                    name="mocked",
-                    pipeline_uuid="mocked",
-                    metadata={},
-                    status=Status.CREATED
-                ),
+                [
+                    StepData(
+                        uuid="mocked",
+                        name="mocked",
+                        pipeline_uuid="mocked",
+                        metadata={},
+                        status=Status.CREATED,
+                    ),
+                    StepData(
+                        uuid="mocked",
+                        name="mocked",
+                        pipeline_uuid="mocked",
+                        metadata={},
+                        status=Status.CREATED,
+                    ),
+                ],
+                (False, False, False),
             ],
-            (False, False, False),
-        ],
-        [
             [
-                StepData(
-                    uuid="mocked",
-                    name="mocked",
-                    pipeline_uuid="mocked",
-                    metadata={},
-                    status=Status.FINISHED
-                ),
-                StepData(
-                    uuid="mocked",
-                    name="mocked",
-                    pipeline_uuid="mocked",
-                    metadata={},
-                    status=Status.CANCELLED
-                ),
+                [
+                    StepData(
+                        uuid="mocked",
+                        name="mocked",
+                        pipeline_uuid="mocked",
+                        metadata={},
+                        status=Status.FINISHED,
+                    ),
+                    StepData(
+                        uuid="mocked",
+                        name="mocked",
+                        pipeline_uuid="mocked",
+                        metadata={},
+                        status=Status.CANCELLED,
+                    ),
+                ],
+                (False, True, False),
             ],
-            (False, True, False),
-        ],
-        [
             [
-                StepData(
-                    uuid="mocked",
-                    name="mocked",
-                    pipeline_uuid="mocked",
-                    metadata={},
-                    status=Status.FINISHED
-                ),
-                StepData(
-                    uuid="mocked",
-                    name="mocked",
-                    pipeline_uuid="mocked",
-                    metadata={},
-                    status=Status.FINISHED
-                ),
+                [
+                    StepData(
+                        uuid="mocked",
+                        name="mocked",
+                        pipeline_uuid="mocked",
+                        metadata={},
+                        status=Status.FINISHED,
+                    ),
+                    StepData(
+                        uuid="mocked",
+                        name="mocked",
+                        pipeline_uuid="mocked",
+                        metadata={},
+                        status=Status.FINISHED,
+                    ),
+                ],
+                (False, False, True),
             ],
-            (False, False, True),
         ],
-    ])
-    def test_pipeline_check_action_needed(
-        self,
-        mocker,
-        steps,
-        expected_results
-    ):
+    )
+    def test_pipeline_check_action_needed(self, mocker, steps, expected_results):
         mocked_create_instance = mocker.patch(
-            "conftest.TestPipelineWithSteps._create_instance",
-            return_value={}
+            "conftest.TestPipelineWithSteps._create_instance", return_value={}
         )
 
         instance = TestPipelineWithSteps(repository_class=TestRepository)
@@ -152,38 +144,15 @@ class TestPipeline:
             "fail_callcount",
             "cancel_callcount",
             "finish_callcount",
-            "expected_result"
+            "expected_result",
         ],
         [
-            [
-                (False, False, False),
-                0,
-                0,
-                0,
-                True
-            ],
-            [
-                (True, False, False),
-                1,
-                0,
-                0,
-                False
-            ],
-            [
-                (False, True, False),
-                0,
-                1,
-                0,
-                False
-            ],
-            [
-                (False, False, True),
-                0,
-                0,
-                1,
-                False
-            ],
-        ])
+            [(False, False, False), 0, 0, 0, True],
+            [(True, False, False), 1, 0, 0, False],
+            [(False, True, False), 0, 1, 0, False],
+            [(False, False, True), 0, 0, 1, False],
+        ],
+    )
     def test_should_continue(
         self,
         mocker,
@@ -191,11 +160,11 @@ class TestPipeline:
         fail_callcount,
         cancel_callcount,
         finish_callcount,
-        expected_result
+        expected_result,
     ):
         mocked_check_action_needed = mocker.patch(
             "conftest.TestPipelineWithSteps._check_action_needed",
-            return_value=check_action_needed_response
+            return_value=check_action_needed_response,
         )
         mocked_fail = mocker.patch(
             "conftest.TestPipelineWithSteps.fail",

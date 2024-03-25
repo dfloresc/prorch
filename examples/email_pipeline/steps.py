@@ -1,7 +1,7 @@
-from prorch.step.step import Step
+from prorch.decorators.decorators import register_step
 from prorch.mixins.on_continue import OnContinueMixin
 from prorch.mixins.on_start import OnStartMixin
-from prorch.decorators.decorators import register_step
+from prorch.step.step import Step
 
 
 @register_step

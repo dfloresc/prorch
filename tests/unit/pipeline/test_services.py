@@ -1,8 +1,8 @@
 import pytest
+from conftest import TestRepository
 
 from prorch.dataclasses.pipeline import PipelineData
 from prorch.pipeline.services import get_active_pipelines
-from conftest import TestRepository
 
 
 class TestPipelineServices:
@@ -16,28 +16,29 @@ class TestPipelineServices:
 
         mocked_provider_get_active_pipelines.assert_called_once()
 
-    @pytest.mark.parametrize(["active_pipelines", "count"], [
+    @pytest.mark.parametrize(
+        ["active_pipelines", "count"],
         [
             [
-                PipelineData(
-                    uuid="mocked_1",
-                    name="mocked_1",
-                    metadata={},
-                    status="mocked",
-                ),
-                PipelineData(
-                    uuid="mocked_2",
-                    name="mocked_2",
-                    metadata={},
-                    status="mocked",
-                ),
+                [
+                    PipelineData(
+                        uuid="mocked_1",
+                        name="mocked_1",
+                        metadata={},
+                        status="mocked",
+                    ),
+                    PipelineData(
+                        uuid="mocked_2",
+                        name="mocked_2",
+                        metadata={},
+                        status="mocked",
+                    ),
+                ],
+                2,
             ],
-            2
+            [[], 0],
         ],
-        [
-            [], 0
-        ]
-    ])
+    )
     def test_get_active_pipelines_should_return_a_value(
         self,
         mocker,

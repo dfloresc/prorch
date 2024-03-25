@@ -1,7 +1,7 @@
-from prorch.orchestrator.orchestrator import Orchestrator, OrchestratorConfig
 from pipelines import *
 from tinydb_repository import TinyDBRepository
 
+from prorch.orchestrator.orchestrator import Orchestrator, OrchestratorConfig
 
 orchestrator_config = OrchestratorConfig(repository_class=TinyDBRepository)
 orchestrator = Orchestrator(config=orchestrator_config)

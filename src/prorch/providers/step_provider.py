@@ -1,8 +1,8 @@
 from typing import List
 
 from prorch.dataclasses.step import StepData
-from prorch.utils.constants import Metadata
 from prorch.providers.base_provider import BaseProvider
+from prorch.utils.constants import Metadata
 
 
 class StepProvider(BaseProvider):

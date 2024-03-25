@@ -1,20 +1,15 @@
 from collections import Counter
-from typing import List, Dict, Tuple
+from typing import Dict, List, Tuple
 from uuid import uuid4
 
 from prorch.dataclasses.pipeline import PipelineData
-from prorch.providers.pipeline_provider import PipelineProvider
-
-from prorch.step import services as StepServices
 from prorch.dataclasses.step import StepData
-
-from prorch.exceptions.exceptions import (
-    StepsNotDefinedException,
-    PipelineNameNotDefinedException,
-)
-from prorch.utils.constants import Status
+from prorch.exceptions.exceptions import PipelineNameNotDefinedException, StepsNotDefinedException
 from prorch.interfaces.repository import IRepository
+from prorch.providers.pipeline_provider import PipelineProvider
+from prorch.step import services as StepServices
 from prorch.utils.base import BaseOrchestrator
+from prorch.utils.constants import Status
 
 
 class Pipeline(BaseOrchestrator):
@@ -56,10 +51,7 @@ class Pipeline(BaseOrchestrator):
 
         return True
 
-    def _check_action_needed(
-        self,
-        steps: List[StepData]
-    ) -> Tuple[bool, bool, bool]:
+    def _check_action_needed(self, steps: List[StepData]) -> Tuple[bool, bool, bool]:
         steps_status_mapped = Counter([step.status for step in steps])
 
         must_fail = steps_status_mapped[Status.FAILED] > 0
@@ -84,11 +76,7 @@ class Pipeline(BaseOrchestrator):
 
         return should_continue
 
-    def _get_current_step_instance(
-        self,
-        steps: List[StepData],
-        repository_class: IRepository
-    ):
+    def _get_current_step_instance(self, steps: List[StepData], repository_class: IRepository):
         wanted_step = None
         instance = None
 
@@ -99,8 +87,7 @@ class Pipeline(BaseOrchestrator):
 
         if wanted_step:
             instance = StepServices.get_step_instance(
-                step_data=wanted_step,
-                repository_class=repository_class
+                step_data=wanted_step, repository_class=repository_class
             )
 
         return instance
@@ -120,10 +107,7 @@ class Pipeline(BaseOrchestrator):
 
         for step in self.steps:
             # instance for creation only
-            _ = step(
-                repository_class=self._repository_class,
-                pipeline_uuid=self.uuid
-            )
+            _ = step(repository_class=self._repository_class, pipeline_uuid=self.uuid)
 
     def _load_instance(self, pipeline_uuid: str):
         pipeline_data = self._get(uuid=pipeline_uuid)

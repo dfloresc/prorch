@@ -1,7 +1,8 @@
 from typing import Dict, List, Union
-from prorch.pipeline.pipeline import Pipeline
+
 from prorch.decorators.decorators import register_pipeline
 from prorch.interfaces.repository import IRepository
+from prorch.pipeline.pipeline import Pipeline
 from prorch.step.step import Step
 
 

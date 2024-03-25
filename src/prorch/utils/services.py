@@ -1,4 +1,4 @@
-from .constants import STEPS, PIPELINES
+from .constants import PIPELINES, STEPS
 
 
 def get_step_class(class_name):

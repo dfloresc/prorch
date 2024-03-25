@@ -1,7 +1,7 @@
-from prorch.pipeline.pipeline import Pipeline
-from prorch.decorators.decorators import register_pipeline
-
 from steps import GenerateAudience, GenerateCache, SendEmail
+
+from prorch.decorators.decorators import register_pipeline
+from prorch.pipeline.pipeline import Pipeline
 
 
 @register_pipeline

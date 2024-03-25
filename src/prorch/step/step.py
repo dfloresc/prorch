@@ -1,15 +1,12 @@
 from typing import Dict
 from uuid import uuid4
 
-from prorch.utils.constants import Status
-from prorch.exceptions.exceptions import (
-    PipelineNotDefinedException,
-    StepNameNotDefinedException,
-)
 from prorch.dataclasses.step import StepData
+from prorch.exceptions.exceptions import PipelineNotDefinedException, StepNameNotDefinedException
+from prorch.interfaces.repository import IRepository
 from prorch.providers.step_provider import StepProvider
 from prorch.utils.base import BaseOrchestrator
-from prorch.interfaces.repository import IRepository
+from prorch.utils.constants import Status
 
 
 class Step(BaseOrchestrator):
@@ -22,12 +19,7 @@ class Step(BaseOrchestrator):
     _repository_class: IRepository
     _provider_class = StepProvider
 
-    def __init__(
-        self,
-        repository_class,
-        pipeline_uuid: str = None,
-        step_data: StepData = None
-    ):
+    def __init__(self, repository_class, pipeline_uuid: str = None, step_data: StepData = None):
         super().__init__(repository_class)
         self._validate_name()
 
@@ -67,7 +59,7 @@ class Step(BaseOrchestrator):
             name=self.name,
             pipeline_uuid=self.pipeline_uuid,
             metadata=self.metadata,
-            status=self.status
+            status=self.status,
         )
 
     def _continue(self) -> None:
