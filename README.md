@@ -1,16 +1,18 @@
 # Process Orchestrator
 
 <!-- TOC start -->
-- [Summary](#summary)
-- [Pipeline and Steps](#pipeline-and-steps)
-  * [Step 1: Define the Pipeline](#step-1-define-the-pipeline)
-  * [Step 2: Implement the Steps](#step-2-implement-the-steps)
-  * [Step 3: Execute the Pipeline](#step-3-execute-the-pipeline)
-- [Orchestrator: Managing and Executing Pipelines](#orchestrator-managing-and-executing-pipelines)
-  * [Implementing the IRepository Interface](#implementing-the-irepository-interface)
-- [Configuring and Using the Orchestrator](#configuring-and-using-the-orchestrator)
+- [Process Orchestrator](#process-orchestrator)
+	- [Summary](#summary)
+	- [Installation](#installation)
+	- [Pipeline and Steps](#pipeline-and-steps)
+		- [Step 1: Define the Pipeline](#step-1-define-the-pipeline)
+		- [Step 2: Implement the Steps](#step-2-implement-the-steps)
+		- [Step 3: Execute the Pipeline](#step-3-execute-the-pipeline)
+	- [Orchestrator: Managing and Executing Pipelines](#orchestrator-managing-and-executing-pipelines)
+		- [Implementing the IRepository Interface](#implementing-the-irepository-interface)
+	- [Configuring and Using the Orchestrator](#configuring-and-using-the-orchestrator)
 <!-- TOC end -->
-  
+
 <!-- TOC --><a name="summary"></a>
 ## Summary
 
@@ -19,6 +21,15 @@ This project aims to develop a process orchestrator. The goal is to break down a
 The core of the proposal is to allow developers to create their own "pipelines", including the corresponding steps, in the code in a simple and efficient way.
 
 In summary, this project seeks to facilitate and optimize the management of large processes by dividing them into smaller, specific subprocesses, thus facilitating their implementation and monitoring.
+
+<!-- TOC --><a name="installation"></a>
+## Installation
+
+To install the library easily and securely, you can use pip:
+
+```bash
+$ pip install prorch
+```
 
 <!-- TOC --><a name="pipeline-and-steps"></a>
 ## Pipeline and Steps
