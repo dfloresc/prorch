@@ -25,7 +25,7 @@ class GenerateCache(OnStartMixin, OnContinueMixin, Step):
 
     def on_continue(self):
         print("GenerateCache AfterContinue")
-        self.fail()
+        self.finish()
 
 
 @register_step
