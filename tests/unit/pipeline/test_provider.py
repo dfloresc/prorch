@@ -2,8 +2,8 @@ import pytest
 
 from conftest import TestRepository
 
-from orchestrator.pipeline.data_classes import PipelineData
-from orchestrator.pipeline.provider import PipelineProvider
+from prorch.dataclasses.pipeline import PipelineData
+from prorch.providers.pipeline_provider import PipelineProvider
 
 
 class TestPipelineProvider:

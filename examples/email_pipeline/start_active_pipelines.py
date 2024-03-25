@@ -1,4 +1,4 @@
-from orchestrator.utils.factory import Orchestrator, OrchestratorConfig
+from prorch.orchestrator.orchestrator import Orchestrator, OrchestratorConfig
 from pipelines import *
 from tinydb_repository import TinyDBRepository
 

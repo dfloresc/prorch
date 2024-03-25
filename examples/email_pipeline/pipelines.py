@@ -1,5 +1,5 @@
-from orchestrator.pipeline.pipeline import Pipeline
-from orchestrator.utils.decorators import register_pipeline
+from prorch.pipeline.pipeline import Pipeline
+from prorch.decorators.decorators import register_pipeline
 
 from steps import GenerateAudience, GenerateCache, SendEmail
 

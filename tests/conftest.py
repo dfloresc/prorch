@@ -1,8 +1,8 @@
 from typing import Dict, List, Union
-from orchestrator.pipeline.pipeline import Pipeline
-from orchestrator.utils.decorators import register_pipeline
-from orchestrator.utils.interfaces import IRepository
-from orchestrator.step.step import Step
+from prorch.pipeline.pipeline import Pipeline
+from prorch.decorators.decorators import register_pipeline
+from prorch.interfaces.repository import IRepository
+from prorch.step.step import Step
 
 
 class TestRepository(IRepository):

@@ -1,15 +1,15 @@
 from typing import Dict
 from uuid import uuid4
 
-from orchestrator.utils.constants import Status
-from orchestrator.utils.exceptions import (
+from prorch.utils.constants import Status
+from prorch.exceptions.exceptions import (
     PipelineNotDefinedException,
     StepNameNotDefinedException,
 )
-from orchestrator.step.data_classes import StepData
-from orchestrator.step.provider import StepProvider
-from orchestrator.utils.base import BaseOrchestrator
-from orchestrator.utils.interfaces import IRepository
+from prorch.dataclasses.step import StepData
+from prorch.providers.step_provider import StepProvider
+from prorch.utils.base import BaseOrchestrator
+from prorch.interfaces.repository import IRepository
 
 
 class Step(BaseOrchestrator):

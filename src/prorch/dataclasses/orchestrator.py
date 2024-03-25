@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 from typing import Union
 
-from orchestrator.utils.interfaces import IRepository
+from prorch.interfaces.repository import IRepository
 
 
 @dataclass

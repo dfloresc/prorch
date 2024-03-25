@@ -6,12 +6,12 @@ from conftest import (
     TestPipelineWithSteps,
     TestRepository,
 )
-from orchestrator.utils.exceptions import (
+from prorch.exceptions.exceptions import (
     PipelineNameNotDefinedException,
     StepsNotDefinedException,
 )
-from orchestrator.step.data_classes import StepData
-from orchestrator.utils.constants import Status
+from prorch.dataclasses.step import StepData
+from prorch.utils.constants import Status
 
 
 class TestPipeline:

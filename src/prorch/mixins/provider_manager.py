@@ -1,25 +1,4 @@
-from orchestrator.utils.constants import Status
-
-
-class StatusManager:
-    def _update_status(self, status: Status):
-        self.status = status
-        self._update()
-
-    def start(self):
-        self._update_status(Status.PENDING)
-
-    def finish(self):
-        self._update_status(Status.FINISHED)
-
-    def fail(self):
-        self._update_status(Status.FAILED)
-
-    def cancel(self):
-        self._update_status(Status.CANCELLED)
-
-
-class ProviderManager:
+class ProviderManagerMixin:
     _provider_class = None
     _repository_class = None
 
@@ -44,8 +23,3 @@ class ProviderManager:
             uuid=self.uuid,
             data=self.to_dataclass(),
         )
-
-
-class BaseOrchestrator(StatusManager, ProviderManager):
-    def to_dataclass(self):
-        raise NotImplementedError

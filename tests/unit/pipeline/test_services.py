@@ -1,14 +1,14 @@
 import pytest
 
-from orchestrator.pipeline.data_classes import PipelineData
-from orchestrator.pipeline.services import get_active_pipelines
+from prorch.dataclasses.pipeline import PipelineData
+from prorch.pipeline.services import get_active_pipelines
 from conftest import TestRepository
 
 
 class TestPipelineServices:
     def test_get_active_pipelines_should_call_repository(self, mocker):
         mocked_provider_get_active_pipelines = mocker.patch(
-            "orchestrator.pipeline.services.PipelineProvider.get_active_pipelines",  # noqa: E501
+            "prorch.pipeline.services.PipelineProvider.get_active_pipelines",  # noqa: E501
             return_value=[],
         )
 
@@ -46,7 +46,7 @@ class TestPipelineServices:
     ):
         mocked_active_pipeline = active_pipelines
         mocked_provider_get_active_pipelines = mocker.patch(
-            "orchestrator.pipeline.services.PipelineProvider.get_active_pipelines",  # noqa: E501
+            "prorch.pipeline.services.PipelineProvider.get_active_pipelines",  # noqa: E501
             return_value=mocked_active_pipeline,
         )
 

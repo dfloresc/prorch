@@ -1,10 +1,10 @@
 from typing import List
 
-from orchestrator.pipeline.data_classes import PipelineData
-from orchestrator.pipeline import services as pipeline_services
-from orchestrator.utils import services as UtilServices
-from orchestrator.utils.data_classes import OrchestratorConfig
-from orchestrator.utils.interfaces import IRepository
+from prorch.dataclasses.pipeline import PipelineData
+from prorch.pipeline import services as pipeline_services
+from prorch.utils import services as UtilServices
+from prorch.dataclasses.orchestrator import OrchestratorConfig
+from prorch.interfaces.repository import IRepository
 
 
 class Orchestrator:

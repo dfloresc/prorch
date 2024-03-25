@@ -1,8 +1,8 @@
 from typing import List
 
-from orchestrator.pipeline.data_classes import PipelineData
-from orchestrator.utils.constants import Metadata
-from orchestrator.utils.providers import BaseProvider
+from prorch.dataclasses.pipeline import PipelineData
+from prorch.utils.constants import Metadata
+from prorch.providers.base_provider import BaseProvider
 
 
 class PipelineProvider(BaseProvider):

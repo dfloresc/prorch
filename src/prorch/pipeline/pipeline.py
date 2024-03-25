@@ -2,19 +2,19 @@ from collections import Counter
 from typing import List, Dict, Tuple
 from uuid import uuid4
 
-from orchestrator.pipeline.data_classes import PipelineData
-from orchestrator.pipeline.provider import PipelineProvider
+from prorch.dataclasses.pipeline import PipelineData
+from prorch.providers.pipeline_provider import PipelineProvider
 
-from orchestrator.step import services as StepServices
-from orchestrator.step.data_classes import StepData
+from prorch.step import services as StepServices
+from prorch.dataclasses.step import StepData
 
-from orchestrator.utils.exceptions import (
+from prorch.exceptions.exceptions import (
     StepsNotDefinedException,
     PipelineNameNotDefinedException,
 )
-from orchestrator.utils.constants import Status
-from orchestrator.utils.interfaces import IRepository
-from orchestrator.utils.base import BaseOrchestrator
+from prorch.utils.constants import Status
+from prorch.interfaces.repository import IRepository
+from prorch.utils.base import BaseOrchestrator
 
 
 class Pipeline(BaseOrchestrator):

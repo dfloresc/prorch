@@ -1,9 +1,9 @@
 from tinydb import TinyDB, where
 from typing import Dict, List, Union
 
-from orchestrator.utils.constants import Metadata
-from orchestrator.utils.data_classes import SavedItem
-from orchestrator.utils.interfaces import IRepository
+from prorch.utils.constants import Metadata
+from prorch.dataclasses.orchestrator import SavedItem
+from prorch.interfaces.repository import IRepository
 
 
 class TinyDBRepository(IRepository):

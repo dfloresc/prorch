@@ -1,8 +1,8 @@
 from typing import List
 
-from orchestrator.step.data_classes import StepData
-from orchestrator.utils.constants import Metadata
-from orchestrator.utils.providers import BaseProvider
+from prorch.dataclasses.step import StepData
+from prorch.utils.constants import Metadata
+from prorch.providers.base_provider import BaseProvider
 
 
 class StepProvider(BaseProvider):

@@ -1,4 +1,4 @@
-from orchestrator.utils.constants import PIPELINES, STEPS
+from prorch.utils.constants import PIPELINES, STEPS
 
 
 def register_pipeline(pipeline_class):

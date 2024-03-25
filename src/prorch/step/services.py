@@ -1,10 +1,10 @@
 from typing import List
 
-from orchestrator.step.provider import StepProvider
-from orchestrator.step.data_classes import StepData
-from orchestrator.step.step import Step
-from orchestrator.utils import services as UtilServices
-from orchestrator.utils.interfaces import IRepository
+from prorch.providers.step_provider import StepProvider
+from prorch.dataclasses.step import StepData
+from prorch.step.step import Step
+from prorch.utils import services as UtilServices
+from prorch.interfaces.repository import IRepository
 
 
 def search_steps_by_pipeline_uuid(

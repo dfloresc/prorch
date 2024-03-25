@@ -1,7 +1,7 @@
 from dataclasses import asdict
 from typing import Dict
 
-from orchestrator.utils.interfaces import IRepository
+from prorch.interfaces.repository import IRepository
 
 
 class BaseProvider:
